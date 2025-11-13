@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
+import path from 'path'
 import autocompleteRoute from './routes/autocomplete'
 import adsRoute from './routes/ads'
 
@@ -12,6 +13,7 @@ app.use(express.json())
 
 app.use('/api/autocomplete', autocompleteRoute)
 app.use('/api/ads', adsRoute)
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
 
 app.get('/', (_, res) => res.send('XE API running'))
 

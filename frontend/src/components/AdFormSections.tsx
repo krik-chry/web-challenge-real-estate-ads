@@ -15,6 +15,7 @@ import PriceInput from './form-inputs/PriceInput'
 import PropertyDetailsInputs from './form-inputs/PropertyDetailsInputs'
 import LocationInput from './form-inputs/LocationInput'
 import DescriptionInput from './form-inputs/DescriptionInput'
+import ImageUpload from './ImageUpload'
 
 type Props = {
   register: UseFormRegister<FormValues>
@@ -35,6 +36,7 @@ type Props = {
   isLocationSelected: boolean
   onSelectArea: (item: AutocompleteResult) => void
   onClearLocation: () => void
+  onImageChange: (file: File | null) => void
 }
 
 export default function AdFormSections({
@@ -56,6 +58,7 @@ export default function AdFormSections({
   isLocationSelected,
   onSelectArea,
   onClearLocation,
+  onImageChange,
 }: Props) {
   return (
     <>
@@ -166,13 +169,27 @@ export default function AdFormSections({
               />
             </motion.div>
 
-            {/* Description Section */}
+            {/* Image Upload Section */}
             <motion.div
               layout
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3, delay: 0.4, layout: { duration: 0.3 } }}
+              className="card bg-base-100 rounded-none sm:rounded-xl border border-base-300"
+            >
+              <div className="card-body">
+                <ImageUpload onChange={onImageChange} />
+              </div>
+            </motion.div>
+
+            {/* Description Section */}
+            <motion.div
+              layout
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3, delay: 0.5, layout: { duration: 0.3 } }}
               className="card bg-base-100 rounded-none sm:rounded-xl border border-base-300"
             >
               <DescriptionInput register={register} />

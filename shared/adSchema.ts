@@ -33,4 +33,5 @@ export type AdFormData = z.infer<typeof adFormSchema>
 export type AdWithMetadata = AdFormData & {
   id: number
   createdAt: string
+  imageUrl?: string | null
 }

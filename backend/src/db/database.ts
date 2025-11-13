@@ -5,7 +5,7 @@ import { mockAds } from './mockData'
 const dbPath = path.resolve(__dirname, '../../ads.db')
 const db = new Database(dbPath)
 
-// Create table matching your schema
+// Create table matching schema
 db.prepare(
   `
   CREATE TABLE IF NOT EXISTS ads (
@@ -25,6 +25,7 @@ db.prepare(
     mainText TEXT NOT NULL,
     secondaryText TEXT,
     description TEXT,
+    imageUrl TEXT,
     createdAt TEXT DEFAULT (datetime('now'))
   )
 `
@@ -40,8 +41,8 @@ if (count.count === 0) {
     INSERT INTO ads (
       propertyType, apartmentType, transactionType, price, totalSize,
       energyClass, floor, bedrooms, bathrooms, wc, condition,
-      placeId, mainText, secondaryText, description
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      placeId, mainText, secondaryText, description, imageUrl
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `)
 
   mockAds.forEach((ad) => {

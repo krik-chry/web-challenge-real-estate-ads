@@ -58,10 +58,11 @@ This starts both backend and frontend servers:
 
 - Three pages: Home, Create Ad, View All Ads
 - Dynamic form with conditional fields based on property type
+- Image upload with drag & drop support and preview
 - Location autocomplete with caching and debouncing
 - Real-time validation
 - Responsive design with light/dark theme toggle
-- Auto-seeded database with 6 sample ads
+- Auto-seeded database with 6 sample ads including images
 
 ### Property Types
 
@@ -75,7 +76,9 @@ This starts both backend and frontend servers:
 
 - Shared Zod validation schema between frontend and backend
 - Conditional validation: Energy class required for buildings, condition required for plots
-- SQLite database with automatic image assignment based on property type
+- Image upload using Multer with multipart/form-data
+- Image storage in local filesystem with static file serving
+- SQLite database with imageUrl field for storing image paths
 - In-memory caching for autocomplete API (5-minute TTL)
 - React Hook Form for form management
 - TypeScript throughout
@@ -83,19 +86,22 @@ This starts both backend and frontend servers:
 ## API Endpoints
 
 - `GET /api/autocomplete?input=<search>` - Location autocomplete
-- `POST /api/ads` - Create new ad
+- `POST /api/ads` - Create new ad (supports multipart/form-data for image upload)
 - `GET /api/ads` - List all ads
+- `GET /uploads/:filename` - Serve uploaded images
 
 ## Technologies Used
 
-**Frontend**: React, TypeScript, Vite, TailwindCSS, DaisyUI, React Hook Form, Zod
+**Frontend**: React, TypeScript, Vite, TailwindCSS, DaisyUI, React Hook Form, Zod, Framer Motion
 
-**Backend**: Express, TypeScript, SQLite, Zod, Node-Cache
+**Backend**: Express, TypeScript, SQLite, Zod, Node-Cache, Multer
 
 ## Notes
 
 - The SQLite database file is automatically created on first run
-- Mock data with 6 sample ads is inserted automatically
+- Mock data with 6 sample ads is inserted automatically with Unsplash images
+- Uploaded images are stored in `backend/uploads/` directory
+- Image upload supports JPEG, PNG, GIF, and WebP formats (max 40MB)
 - No external database setup required
 
 ---

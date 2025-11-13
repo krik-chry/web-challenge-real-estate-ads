@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import {
   LuBath,
   LuBedDouble,
-  LuCameraOff,
   LuCheck,
   LuHouse,
   LuPencilRuler,
@@ -11,7 +10,6 @@ import {
   LuToilet,
 } from 'react-icons/lu'
 import { TbStairs, TbRuler } from 'react-icons/tb'
-import type { FormValues } from '../schemas/adFormSchema'
 import {
   PROPERTY_TYPES,
   APARTMENT_TYPES,
@@ -23,9 +21,10 @@ import {
   PLOT_CONDITION_OPTIONS,
   ROOM_NUMBER_OPTIONS,
 } from '../constants/formOptions'
+import type { AdWithMetadata } from '../../../shared/adSchema'
 
 interface AdSuccessPreviewProps {
-  data: FormValues
+  data: AdWithMetadata
 }
 
 export default function AdSuccessPreview({ data }: AdSuccessPreviewProps) {
@@ -72,6 +71,12 @@ export default function AdSuccessPreview({ data }: AdSuccessPreviewProps) {
       : CONDITION_OPTIONS.find((option) => option.value === data.condition)?.label
     : null
 
+  const imageUrl = data.imageUrl
+    ? data.imageUrl.startsWith('http')
+      ? data.imageUrl
+      : `http://localhost:4000${data.imageUrl}`
+    : null
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -95,10 +100,16 @@ export default function AdSuccessPreview({ data }: AdSuccessPreviewProps) {
       </div>
 
       <div className="card bg-base-100 dark:border border-base-300 shadow-xl dark:shadow-none overflow-hidden">
-        <figure className="relative h-48 bg-linear-to-br from-primary/20 to-primary/5">
-          <div className="absolute inset-0 flex items-center justify-center text-5xl opacity-20">
-            <LuCameraOff />
-          </div>
+        <figure className="relative h-56 bg-linear-to-br from-primary/20 to-primary/5">
+          {imageUrl ? (
+            <img src={imageUrl} alt={propertyTypeLabel} className="w-full h-full object-cover" />
+          ) : (
+            <img
+              src={isPlot ? '/land-placeholder.svg' : '/house-placeholder.svg'}
+              alt="No image available"
+              className="w-full h-full object-contain"
+            />
+          )}
           <div className="absolute top-3 left-3">
             <div className="badge rounded-full font-bold badge-primary">{transactionTypeLabel}</div>
           </div>

@@ -1,5 +1,5 @@
 import { motion } from 'motion/react'
-import { LuBath, LuBedDouble, LuCameraOff, LuPencilRuler, LuToilet } from 'react-icons/lu'
+import { LuBath, LuBedDouble, LuPencilRuler, LuToilet } from 'react-icons/lu'
 import { TbStairs } from 'react-icons/tb'
 import type { AdWithMetadata } from '../../../shared/adSchema'
 import {
@@ -32,19 +32,30 @@ export default function AdCard({ ad }: AdCardProps) {
         ad.condition
       : null
 
+  const imageUrl = ad.imageUrl
+    ? ad.imageUrl.startsWith('http')
+      ? ad.imageUrl
+      : `http://localhost:4000${ad.imageUrl}`
+    : null
+
   return (
     <motion.div
       key={`ad-${ad.id}`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
-      className="card rounded-md bg-base-100 border border-base-300 hover:shadow-md dark:hover:shadow-none hover:dark:border-gray-700 cursor-pointer transition-all overflow-hidden"
+      className="card bg-base-100 border border-base-300 hover:shadow-md dark:hover:shadow-none hover:dark:border-gray-700 cursor-pointer transition-all overflow-hidden"
     >
-      {/* Mock Image */}
-      <figure className="relative h-48 bg-linear-to-br from-primary/20 to-primary/5">
-        <div className="absolute inset-0 flex items-center justify-center text-5xl opacity-20">
-          <LuCameraOff />
-        </div>
+      <figure className="relative h-56 bg-linear-to-br from-primary/20 to-primary/5">
+        {imageUrl ? (
+          <img src={imageUrl} alt={propertyTypeLabel} className="w-full h-full object-cover" />
+        ) : (
+          <img
+            src={isPlot ? '/land-placeholder.svg' : '/house-placeholder.svg'}
+            alt="No image available"
+            className="w-full h-full object-contain"
+          />
+        )}
         <div className="absolute top-3 left-3">
           <div className="badge rounded-full font-bold badge-primary">{transactionTypeLabel}</div>
         </div>
@@ -103,7 +114,7 @@ export default function AdCard({ ad }: AdCardProps) {
           )}
         </div>
 
-        <div className="text-xl font-bold text-base-content self-end">
+        <div className="text-xl font-bold text-base-content self-end mt-auto">
           €{ad.price.toLocaleString('el-GR')}
           {ad.transactionType === 'RENT' && <span className="text-sm">/μήνα</span>}
         </div>

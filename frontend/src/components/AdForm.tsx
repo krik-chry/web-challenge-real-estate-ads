@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { motion, AnimatePresence } from 'motion/react'
 
 import { adFormSchema, type FormValues } from '../schemas/adFormSchema'
+import type { AdWithMetadata } from '../../../shared/adSchema'
 import { api } from '../services/api'
 import { useLocationSelection } from '../hooks/useLocationSelection'
 import { showToast } from '../utils/toast'
@@ -14,7 +15,8 @@ import AdSuccessPreview from './AdSuccessPreview'
 
 export default function AdForm() {
   const queryClient = useQueryClient()
-  const [submittedData, setSubmittedData] = useState<FormValues | null>(null)
+  const [submittedData, setSubmittedData] = useState<AdWithMetadata | null>(null)
+  const [imageFile, setImageFile] = useState<File | null>(null)
 
   const {
     clearErrors,
@@ -53,12 +55,29 @@ export default function AdForm() {
 
   const onSubmit = async (data: FormValues) => {
     try {
-      const response = await api.post('/api/ads', data)
+      const formData = new FormData()
+
+      Object.entries(data).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+          formData.append(key, String(value))
+        }
+      })
+
+      if (imageFile) {
+        formData.append('image', imageFile)
+      }
+
+      const response = await api.post('/api/ads', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
 
       if (response.status === 201 && response.data.success) {
         showToast(response.data.message || 'Η αγγελία δημοσιεύτηκε επιτυχώς!', 'success')
-        setSubmittedData(data)
+        setSubmittedData(response.data.data)
         reset()
+        setImageFile(null)
         onClearLocation()
         queryClient.invalidateQueries({
           queryKey: ['ads'],
@@ -124,6 +143,7 @@ export default function AdForm() {
         isLocationSelected={isLocationSelected}
         onSelectArea={onSelectArea}
         onClearLocation={onClearLocation}
+        onImageChange={setImageFile}
       />
 
       <AnimatePresence mode="popLayout">

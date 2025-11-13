@@ -6,9 +6,17 @@ import { adFormSchema } from '../../../shared/adSchema'
 
 export async function createAd(req: Request, res: Response) {
   try {
-    const validatedData = adFormSchema.parse(req.body)
+    const parsedBody = {
+      ...req.body,
+      price: req.body.price ? Number(req.body.price) : undefined,
+      totalSize: req.body.totalSize ? Number(req.body.totalSize) : undefined,
+    }
 
-    const inserted = insertAd(validatedData)
+    const validatedData = adFormSchema.parse(parsedBody)
+
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null
+
+    const inserted = insertAd(validatedData, imageUrl)
 
     return res.status(201).json({
       success: true,
