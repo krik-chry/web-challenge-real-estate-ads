@@ -75,7 +75,7 @@ This starts both backend and frontend servers:
 ### Technical Implementation
 
 - Shared Zod validation schema between frontend and backend
-- Conditional validation: Energy class required for buildings, condition required for plots
+- Conditional validation for property-specific fields
 - Image upload using Multer with multipart/form-data
 - Image storage in local filesystem with static file serving
 - SQLite database with imageUrl field for storing image paths
@@ -88,7 +88,10 @@ This starts both backend and frontend servers:
 - `GET /api/autocomplete?input=<search>` - Location autocomplete
 - `POST /api/ads` - Create new ad (supports multipart/form-data for image upload)
 - `GET /api/ads` - List all ads
-- `GET /uploads/:filename` - Serve uploaded images
+
+## Static Files
+
+- `/uploads/:filename` - Uploaded images (served statically)
 
 ## Technologies Used
 
