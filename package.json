@@ -1,0 +1,20 @@
+{
+  "name": "xe-web-challenge",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend"
+  },
+  "keywords": [],
+  "author": "Chrysostomos Krikonis",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "dependencies": {
+    "zod": "^4.1.12"
+  }
+}
